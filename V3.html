@@ -1,0 +1,400 @@
+<html><head>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>nbir s-expr</title>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/scheme.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script><style type="text/css">.hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}</style>
+            <style>
+                body {
+                    background: #f3f3f3;
+                    color: #444;
+                    font-family: Open Sans,Arial;
+                }
+                table {
+                    table-layout:fixed;
+                }
+                th {
+                    font-size: 22px;
+                }
+                td {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    word-wrap: break-word;
+                }
+                .filename {
+                    background: #ddd;
+                    text-align: center;
+                    font-size: 20px;
+                }
+                .hljs-ln-numbers {
+                    color: #ccc;
+                }
+            </style>
+        <script type="text/javascript">(async function() { class ReadwiseElement extends HTMLElement {
+          constructor() {
+            super();
+            [...this.children].forEach((child) => this.appendChild(child));
+          }
+        }
+        try {
+          customElements.define(
+            "readwise-tooltip-container",
+            class ReadwiseTooltipContainer extends ReadwiseElement {},
+            {"extends":"div"},
+          );
+        } catch (e) {
+          if(!e.message.includes("already been defined")
+            && !e.message.includes("already been used with this registry")) {
+            console.error("Failed to define custom element", e);
+            throw e;
+          }
+        } })()</script><script type="text/javascript">document.body.appendChild(document.createElement("readwise-tooltip-container"));</script><script type="text/javascript">(async function() { class ReadwiseElement extends HTMLElement {
+          constructor() {
+            super();
+
+            [...this.children].forEach((child) => this.appendChild(child));
+          }
+        }
+        try {
+          customElements.define(
+            "rw-highlight",
+            class ReadwiseHighlight extends ReadwiseElement {},
+            {"extends":"mark"},
+          );
+        } catch (e) {
+          if(!e.message.includes("already been defined")
+            && !e.message.includes("already been used with this registry")) {
+            console.error("Failed to define custom element", e);
+            throw e;
+          }
+        } })()</script></head><body data-new-gr-c-s-check-loaded="8.906.0" data-gr-ext-installed=""><table><tr><td colspan="2" class="filename">2-v.bal</td></tr><tr><td><pre><code class="language-ts hljs language-typescript">import ballerina/io;
+type F function(int, int) returns int;
+
+type R record {|
+    int a;
+    int b;
+    F f;
+|};
+
+public function main() {
+    F f1 = lambdaReturn();
+    io:println(f1(1, 2)); // @output 3
+    R r = lambdaStruct();
+    F f2 = r.f;
+    io:println(f2(1, 2)); // @output 3
+}
+
+
+function lambdaReturn() returns F {
+    return function(int a, int b) returns int {
+        return a + b;
+    };
+}
+
+function lambdaStruct() returns R {
+    return { a: 1, b: 2,
+             f: function(int a, int b) returns int {
+                 return a + b;
+           }};
+}
+</code></pre></td><td><pre><code class="language-scheme hljs">(atoms
+    ("FT.11" (function int (int int)))
+    ("MT.14" (mapping (("a" int) ("b" int) ("f" FT.11)))))
+(defns
+    ("main" (public) (function (() () never) (file "2-v") (loc 10 16)
+            (registers
+                (r.f1 var FT.11)
+                (r1 tmp FT.11)
+                (r2 tmp int)
+                (r3 tmp list)
+                (r4 tmp ())
+                (r.r var MT.14)
+                (r6 tmp MT.14)
+                (r.f2 var FT.11)
+                (r8 tmp FT.11)
+                (r9 tmp int)
+                (r10 tmp list)
+                (r11 tmp ()))
+            (blocks
+                (b0 (no-panic)
+                    (call-rest-list "lambdaReturn" r1)
+                    (set r.f1 r1)
+                    (call r.f1 r2 1 2)
+                    (list-construct r3 r2)
+                    (call-rest-list (module-get ("ballerina" "io") "println") r4 r3)
+                    (call-rest-list "lambdaStruct" r6)
+                    (set r.r r6)
+                    (loc 14 12)
+                    (mapping-get r8 r.r "f")
+                    (set r.f2 r8)
+                    (call r.f2 r9 1 2)
+                    (list-construct r10 r9)
+                    (call-rest-list (module-get ("ballerina" "io") "println") r11 r10)
+                    (ret ())))))
+    ("lambdaReturn" () (function (FT.11 () never) (file "2-v") (loc 19 9)
+            (registers)
+            (blocks
+                (b0 (no-panic)
+                    (ret (function f.3))))
+            (closures
+                (f.3 (function (int (int int) never) (loc 20 11)
+                        (registers
+                            (r.a param int)
+                            (r.b param int)
+                            (r2 tmp int)
+                            (r3 tmp error))
+                        (blocks
+                            (b0 (on-panic b1)
+                                (loc 21 17)
+                                (int+ r2 r.a r.b)
+                                (ret r2))
+                            (b1 (no-panic)
+                                (catch r3)
+                                (abnormal-ret r3))))))))
+    ("lambdaStruct" () (function (MT.14 () never) (file "2-v") (loc 25 9)
+            (registers
+                (r0 tmp MT.14))
+            (blocks
+                (b0 (no-panic)
+                    (mapping-construct r0 ("a" 1) ("b" 2) ("f" (function f.4)))
+                    (ret r0)))
+            (closures
+                (f.4 (function (int (int int) never) (loc 27 16)
+                        (registers
+                            (r.a param int)
+                            (r.b param int)
+                            (r2 tmp int)
+                            (r3 tmp error))
+                        (blocks
+                            (b0 (on-panic b1)
+                                (loc 28 26)
+                                (int+ r2 r.a r.b)
+                                (ret r2))
+                            (b1 (no-panic)
+                                (catch r3)
+                                (abnormal-ret r3)))))))))
+(decls
+    (("ballerina" "io")
+        ("println" function (() (list) (| any error)))))
+(files
+    ("2-v" "../../testSuite/15-lambda/2-v.bal"))</code></pre></td></tr><tr><td colspan="2" class="filename">typevariance-v.bal</td></tr><tr><td><pre><code class="language-ts hljs language-typescript">import ballerina/io;
+type F function(int, int) returns int;
+
+public function main() {
+    F f = function(int... a) returns int {
+            int sum = 0;
+            foreach int i in 0 ..< a.length() {
+                sum += a[i];
+            }
+            return sum;
+    };
+    int x = f(1, 2);
+    io:println(x); // @output 3
+}
+</code></pre></td><td><pre><code class="language-scheme hljs">(atoms
+    ("LT.13" (array int))
+    ("FT.11" (function int (int int))))
+(defns
+    ("main" (public) (function (() () never) (file "typevariance-v") (loc 4 16)
+            (registers
+                (r.f var FT.11)
+                (r.x var int)
+                (r2 tmp int)
+                (r3 tmp list)
+                (r4 tmp ()))
+            (blocks
+                (b0 (no-panic)
+                    (set r.f (function f.1))
+                    (call r.f r2 1 2)
+                    (set r.x r2)
+                    (list-construct r3 r.x)
+                    (call-rest-list (module-get ("ballerina" "io") "println") r4 r3)
+                    (ret ())))
+            (closures
+                (f.1 (function (int (LT.13) int) (loc 5 10)
+                        (registers
+                            (r.a param LT.13)
+                            (r.sum var int)
+                            (r2 tmp int)
+                            (r.i var int)
+                            (r4 tmp boolean)
+                            (r5 tmp int)
+                            (r6 tmp int)
+                            (r7 tmp int)
+                            (r8 tmp error))
+                        (blocks
+                            (b0 (no-panic)
+                                (set r.sum 0)
+                                (call-rest-list (module-get ("ballerina" "lang" "array") "length") r2 r.a)
+                                (set r.i 0)
+                                (branch b1))
+                            (b1 (no-panic)
+                                (less-than r4 r.i r2)
+                                (cond-branch r4 b3 b2))
+                            (b2 (no-panic)
+                                (ret r.sum))
+                            (b3 (on-panic b5)
+                                (loc 8 24)
+                                (list-get r5 r.a r.i)
+                                (loc 8 20)
+                                (int+ r6 r.sum r5)
+                                (set r.sum r6)
+                                (branch b4))
+                            (b4 (no-panic)
+                                (no-panic-int+ r7 r.i 1)
+                                (set r.i r7)
+                                (branch-back b1))
+                            (b5 (no-panic)
+                                (catch r8)
+                                (abnormal-ret r8)))))))))
+(decls
+    (("ballerina" "lang" "array")
+        ("length" function (int (list) never)))
+    (("ballerina" "io")
+        ("println" function (() (list) (| any error)))))
+(files
+    ("typevariance-v" "../../testSuite/15-lambda/typevariance-v.bal"))</code></pre></td></tr><tr><td colspan="2" class="filename">1-v.bal</td></tr><tr><td><pre><code class="language-ts hljs language-typescript">import ballerina/io;
+type F function(int, int) returns int;
+public function main() {
+    F f = function (int a, int b) returns int {
+        return a + b;
+    };
+    F g = function (int a, int b) returns int {
+        F mul = function (int x, int y) returns int {
+            return x * y;
+        };
+        return mul(a, b);
+    };
+    io:println(f(1, 2)); // @output 3
+    io:println(g(4, 2)); // @output 8
+}
+</code></pre></td><td><pre><code class="language-scheme hljs">(atoms
+    ("FT.11" (function int (int int))))
+(defns
+    ("main" (public) (function (() () never) (file "1-v") (loc 3 16)
+            (registers
+                (r.f var FT.11)
+                (r.g var FT.11)
+                (r2 tmp int)
+                (r3 tmp list)
+                (r4 tmp ())
+                (r5 tmp int)
+                (r6 tmp list)
+                (r7 tmp ()))
+            (blocks
+                (b0 (no-panic)
+                    (set r.f (function f.1))
+                    (set r.g (function f.2))
+                    (call r.f r2 1 2)
+                    (list-construct r3 r2)
+                    (call-rest-list (module-get ("ballerina" "io") "println") r4 r3)
+                    (call r.g r5 4 2)
+                    (list-construct r6 r5)
+                    (call-rest-list (module-get ("ballerina" "io") "println") r7 r6)
+                    (ret ())))
+            (closures
+                (f.1 (function (int (int int) never) (loc 4 10)
+                        (registers
+                            (r.a param int)
+                            (r.b param int)
+                            (r2 tmp int)
+                            (r3 tmp error))
+                        (blocks
+                            (b0 (on-panic b1)
+                                (loc 5 17)
+                                (int+ r2 r.a r.b)
+                                (ret r2))
+                            (b1 (no-panic)
+                                (catch r3)
+                                (abnormal-ret r3)))))
+                (f.2 (function (int (int int) never) (loc 7 10)
+                        (registers
+                            (r.a param int)
+                            (r.b param int)
+                            (r.mul var FT.11)
+                            (r3 tmp int))
+                        (blocks
+                            (b0 (no-panic)
+                                (set r.mul (function f.3))
+                                (call r.mul r3 r.a r.b)
+                                (ret r3)))
+                        (closures (f.3 (function (int (int int) never) (loc 8 16)
+                                    (registers
+                                        (r.x param int)
+                                        (r.y param int)
+                                        (r2 tmp int)
+                                        (r3 tmp error))
+                                    (blocks
+                                        (b0 (on-panic b1)
+                                            (loc 9 21)
+                                            (int* r2 r.x r.y)
+                                            (ret r2))
+                                        (b1 (no-panic)
+                                            (catch r3)
+                                            (abnormal-ret r3))))))))))))
+(decls
+    (("ballerina" "io")
+        ("println" function (() (list) (| any error)))))
+(files
+    ("1-v" "../../testSuite/15-lambda/1-v.bal"))</code></pre></td></tr><tr><td colspan="2" class="filename">arg-v.bal</td></tr><tr><td><pre><code class="language-ts hljs language-typescript">import ballerina/io;
+type F function(int, int) returns int;
+
+public function main() {
+    int result = exec(1, 2, function(int a, int b) returns int {
+        return a + b;
+    });
+    io:println(result); // @output 3
+}
+
+function exec(int a, int b, F f) returns int {
+    return f(a, b);
+}
+</code></pre></td><td><pre><code class="language-scheme hljs">(atoms
+    ("FT.11" (function int (int int))))
+(defns
+    ("main" (public) (function (() () never) (file "arg-v") (loc 4 16)
+            (registers
+                (r.result var int)
+                (r1 tmp int)
+                (r2 tmp list)
+                (r3 tmp ()))
+            (blocks
+                (b0 (no-panic)
+                    (call-rest-list "exec" r1 1 2 (function f.2))
+                    (set r.result r1)
+                    (list-construct r2 r.result)
+                    (call-rest-list (module-get ("ballerina" "io") "println") r3 r2)
+                    (ret ())))
+            (closures
+                (f.2 (function (int (int int) never) (loc 5 28)
+                        (registers
+                            (r.a param int)
+                            (r.b param int)
+                            (r2 tmp int)
+                            (r3 tmp error))
+                        (blocks
+                            (b0 (on-panic b1)
+                                (loc 6 17)
+                                (int+ r2 r.a r.b)
+                                (ret r2))
+                            (b1 (no-panic)
+                                (catch r3)
+                                (abnormal-ret r3))))))))
+    ("exec" () (function (int (int int FT.11) never) (file "arg-v") (loc 11 9)
+            (registers
+                (r.a param int)
+                (r.b param int)
+                (r.f param FT.11)
+                (r3 tmp int))
+            (blocks
+                (b0 (no-panic)
+                    (call r.f r3 r.a r.b)
+                    (ret r3))))))
+(decls
+    (("ballerina" "io")
+        ("println" function (() (list) (| any error)))))
+(files
+    ("arg-v" "../../testSuite/15-lambda/arg-v.bal"))</code></pre></td></tr></table></body></html>
