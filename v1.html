@@ -371,4 +371,59 @@ function exec(int a, int b, F f) returns int {
     (("ballerina" "io")
         ("println" function (() (list) (| any error)))))
 (files
-    ("arg-v" "../../testSuite/15-lambda/arg-v.bal"))</code></pre></td></tr></table></body></html>
+    ("arg-v" "../../testSuite/15-lambda/arg-v.bal"))</code></pre></td></tr><tr><td colspan="2" class="filename">capture-v.bal</td></tr><tr><td><pre><code class="language-ts hljs language-typescript">import ballerina/io;
+type F function(int) returns int;
+public function main() {
+    int a = 5;
+    function(int) returns int f = function(int x) returns int {
+        return x + a;
+    };
+    io:println(a); // @output 5
+    io:println(f(5)); // @output 10
+}
+
+</code></pre></td><td><pre><code class="language-scheme hljs">(atoms
+    ("FT.11" (function int (int))))
+(defns
+    ("main" (public) (function (() () never) (file "capture-v") (loc 3 16)
+            (registers
+                (r.f var FT.11)
+                (r.a var int)
+                (r1 tmp FT.11)
+                (r2 tmp int)
+                (r3 tmp list)
+                (r4 tmp ()))
+            (blocks
+                (b0 (no-panic)
+                    (set r.a 5)
+                    (function-construct r1 f.1 r.a) ;; (result, function-ref, closures regs...)
+                    (set r.f (r1))
+                    (call r.f r2 5)
+                    (list-construct r3 r2)
+                    (call-rest-list (module-get ("ballerina" "io") "println") r4 r3)
+                    (ret ())))
+            (closures
+                (f.1 (function (int (int) never) (loc 4 34)
+                        (registers
+                            (r.a caputre r.a) ;; (<name>, "capture", register that was captured)
+                            (r.x param int)
+                            (r2 tmp list)
+                            (r3 tmp ())
+                            (r4 tmp int)
+                            (r5 tmp error))
+                        (blocks
+                            (b0 (on-panic b1)
+                                (list-construct r2 r.a)
+                                (call-rest-list (module-get ("ballerina" "io") "println") r3 r2)
+                                (loc 7 17)
+                                (int+ r4 r.x r.a)
+                                (ret r4))
+                            (b1 (no-panic)
+                                (catch r5)
+                                (abnormal-ret r5)))))))))
+(decls
+    (("ballerina" "io")
+        ("println" function (() (list) (| any error)))))
+(files
+    ("capture-v" "../../testSuite/15-lambda/capture-v.bal"))
+</code></pre></td></tr></table></body></html>
